@@ -4,6 +4,7 @@ import numpy as np                          # Paket für numerische Operationen
 import matplotlib.pyplot as plt             # Paket fürs grafische Darstellen
 from matplotlib import rc
 
+
 """
 Optimierung Übung 3
 
@@ -30,12 +31,12 @@ def zf(xVec):
     :return: zugehörigen Zielfunktionswert
     """
 
-    z = (xVec[0]+2*xVec[1]-7)**2 + (2*xVec[0]+xVec[1]-5)**2
+    z = np.sin([xVec[0]]) + 7 * np.sin(xVec[1])**2 + 0.1 * xVec[2]**4 * np.sin(xVec[0])
     return z
 
 
 # Methoden
-def suchBereichBestimmen(x, maxD, c1, c2):
+def suchBereichBestimmen(x, maxD, c1, c2, c3):
     """
     Bestimmung des Suchbereiches (Bereich in dem Nachkommen generiert werden)
 
@@ -46,12 +47,15 @@ def suchBereichBestimmen(x, maxD, c1, c2):
     :return:
     """
 
-    maxSB = np.zeros(shape=(2, 2))
-    minSB = np.zeros(shape=(2, 2))
+    maxSB = np.zeros(shape=(3, 3))
+    minSB = np.zeros(shape=(3, 3))
     maxSB[:, 0] = x - (0.5 * maxD * c1)
     maxSB[:, 1] = x + (0.5 * maxD * c1)
     minSB[:, 0] = x - (0.5 * maxD * c2)
     minSB[:, 1] = x + (0.5 * maxD * c2)
+    maxSB[:, 2] = x + (0.5 * maxD * c3)
+    minSB[:, 2] = x - (0.5 * maxD * c3)
+
 
     return maxSB, minSB
 
@@ -66,15 +70,16 @@ def getNachkomme(minSB, maxSB):
     """
 
     # Vektoren (für 2 dimensionalen Eingangsraum!)
-    xSearch = np.zeros(shape=(2, 2))
-    xNachkomme = np.zeros(shape=(2,))
+    xSearch = np.zeros(shape=(3, 3))
+    xNachkomme = np.zeros(shape=(3,))
 
-    for idx in range(2):
+    for idx in range(3):
         xSearch[idx, 0] = random.uniform(maxSB[idx, 0], minSB[idx, 0])
         xSearch[idx, 1] = random.uniform(minSB[idx, 1], maxSB[idx, 1])
+        xSearch[idx, 2] = random.uniform(minSB[idx, 2], maxSB[idx ,2])
 
     # Zufällige Wahl eines Nachkommens
-    for idx in range(2):
+    for idx in range(3):
         xNachkomme[idx] = xSearch[idx, random.randint(0, 1)]
 
     return xNachkomme
@@ -94,70 +99,72 @@ def checkNB(xVec, nb):
             xVec[idx] = cp.deepcopy(nb[idx, 0])
         if xVec[idx] > nb[idx, 1]:
             xVec[idx] = cp.deepcopy(nb[idx, 1])
-
     return xVec
 
 
-# Ergebnisvisualisierung
-def plotResults(zfHistory, xHistory):
-    """
-
-    :param zfHistory:
-    :param xHistory:
-    :return: None
-    """
-
-    fig, ax = plt.subplots(1, 2)
-    ax[0].plot(zfHistory, 'rx-', markersize=5, linewidth=1)
-    ax[0].set_yscale('log')
-    ax[1].plot(xHistory[:, 0], xHistory[:, 1], 'bx-', markersize=5, linewidth=1)
-    ax[1].plot(1, 3, 'r.', markersize=3)
-    ax[0].grid()
-    ax[1].grid()
-    ax[0].set_title('Optimierungsfortschritt')
-    ax[0].set_ylabel('Zielfunktionswert')
-    ax[0].set_xlabel('Optimierungsiteration')
-    ax[1].set_title('Eingangsraumabsuche')
-    ax[1].set_ylabel(r'$x_2$')
-    ax[1].set_xlabel(r'$x_1$')
-    fig.tight_layout()
-
-    plt.show()
-
+# # Ergebnisvisualisierung
+# def plotResults(zfHistory, xHistory):
+#     """
+#
+#     :param zfHistory:
+#     :param xHistory:
+#     :return: None
+#     """
+#
+#     fig, ax = plt.subplots(1, 2)
+#     ax[0].plot(zfHistory, 'rx-', markersize=5, linewidth=1)
+#     ax[0].set_yscale('log')
+#     ax[1].plot(xHistory[:, 0], xHistory[:, 1], 'bx-', markersize=5, linewidth=1)
+#     ax[1].plot(1, 3, 'r.', markersize=3)
+#     ax[0].grid()
+#     ax[1].grid()
+#     ax[0].set_title('Optimierungsfortschritt')
+#     ax[0].set_ylabel('Zielfunktionswert')
+#     ax[0].set_xlabel('Optimierungsiteration')
+#     ax[1].set_title('Eingangsraumabsuche')
+#     ax[1].set_ylabel(r'$x_2$')
+#     ax[1].set_xlabel(r'$x_1$')
+#     fig.tight_layout()
+#
+#     plt.show()
+#
 
 # Hauptprogramm
 
 # Definition der Nebenbedingungen (zulässiger Bereich)
-nb = np.ndarray(shape=(2, 2))
-nb[0, :] = [-10, 10]        # Nebenbedingung in x1 Richtung
-nb[1, :] = [-10, 10]        # Nebenbedingung in x2 Richtung
+nb = np.ndarray(shape=(3, 2))
+nb[0, :] = [-np.pi, np.pi]        # Nebenbedingung in x1 Richtung
+nb[1, :] = [-np.pi, np.pi]        # Nebenbedingung in x2 Richtung
+nb[2, :] = [-np.pi, np.pi]
 
 # Definition des maximalen Suchbereiches
-maxD = np.ndarray(shape=(2,))
+maxD = np.ndarray(shape=(3,))
 maxD[0] = 10    # Suchbereich in x1 Richtung
 maxD[1] = 10    # Suchbereich in x2 Richtung
+maxD[2] = 10   # Suchbereich in x3 Richtung
 
 # Definition der Optimierungsparameter
 c1 = 0.8
 c2 = 0.1
+c3 = 0.1
 c5 = 0.3
 npAnz = 5
 npCt = 0
 runAnz = 45     # Anzahl der Iterationen
 
 # Initialer Startpunkt
-x = np.ndarray(shape=(2,))
-x[0] = 1    # random.uniform(nb[0,0],nb[0,1])
-x[1] = 8    # random.uniform(nb[1,0],nb[1,1])
-
+x = np.ndarray(shape=(3,))
+x[0] = random.uniform(nb[0,0],nb[0,1])
+x[1] = random.uniform(nb[1,0],nb[1,1])
+x[2] = random.uniform(nb[2,0],nb[2,1])
 # Optimierungsschleife
 zfHistory = []
-xHistory = np.zeros(shape=(runAnz, 2))
+xHistory = np.zeros(shape=(runAnz, 3))
 
 for idx in range(runAnz):
     print('Iteration: %i' %idx)
     # Schrittweiten/Suchbereichsdefinition
-    maxSB, minSB = suchBereichBestimmen(x, maxD, c1, c2)
+    maxSB, minSB = suchBereichBestimmen(x, maxD, c1, c2, c3)
     # Zielfunktionsauswertung
     zfAlt = zf(x)
     # Erzeugen eines Nachkommens
@@ -189,4 +196,4 @@ for idx in range(runAnz):
     zfHistory.append(zf(x))
     xHistory[idx, :] = cp.deepcopy(x)
 
-plotResults(zfHistory, xHistory)
+# plotResults(zfHistory, xHistory)
