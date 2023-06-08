@@ -4,7 +4,6 @@ import numpy as np                          # Paket für numerische Operationen
 import matplotlib.pyplot as plt             # Paket fürs grafische Darstellen
 from matplotlib import rc
 
-
 """
 Optimierung Übung 3
 
@@ -14,7 +13,6 @@ Optimierung Übung 3
 
 Beispiel booth Funktion https://en.wikipedia.org/wiki/Test_functions_for_optimization
 """
-
 # Anpassung Schriftart & -größe für Plots
 rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 rc('text', usetex=True)
@@ -127,7 +125,6 @@ def checkNB(xVec, nb):
 #     fig.tight_layout()
 #
 #     plt.show()
-#
 
 # Hauptprogramm
 
