@@ -9,3 +9,9 @@
 # Suchbereich festlegen
 
 # Normalverteilt Kinder erstellen
+
+# 20% regel
+
+# Kinder wegschmeißen, die NB verletzen
+
+# bestes Kind zu neuen Eltern machen
