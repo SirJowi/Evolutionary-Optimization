@@ -1,6 +1,5 @@
 """Beleg 3 - Modifizierte Evolutionsstrategie | 08/06/2023"""
 
-<<<<<<< HEAD
 
 import random
 import copy as cp
@@ -14,10 +13,6 @@ x = np.ndarray(shape=(3,))
 x[0] = random.uniform(nb[0,0],nb[0,1]) #x1 Richtung
 x[1] = random.uniform(nb[1,0],nb[1,1]) #x2 Richtung
 x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
-
-=======
-# zufälligen Startpunkt erstellen ()
->>>>>>> refs/remotes/origin/main
 
 # Nebenbedingungen festlegen
 nb = np.ndarray(shape=(3, 2))
@@ -41,17 +36,3 @@ def zf(xVec):
 
 # Suchbereich festlegen
 
-<<<<<<< HEAD
-# Normalverteilt Kinder erstellen
-=======
-# Normalverteilt Kinder erstellen (johann)
-
-# 20% regel
-
-# Kinder wegschmeißen, die NB verletzen
-
-# bestes Kind zu neuen Eltern machen
-
-# Visualisierung
-
->>>>>>> refs/remotes/origin/main
