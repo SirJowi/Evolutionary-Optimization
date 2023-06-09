@@ -18,7 +18,18 @@ x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
 nb = np.ndarray(shape=(3, 2))
 nb[0, :] = [-np.pi, np.pi]        # Nebenbedingung in x1 Richtung
 nb[1, :] = [-np.pi, np.pi]        # Nebenbedingung in x2 Richtung
-nb[2, :] = [-np.pi, np.pi]
+nb[2, :] = [-np.pi, np.pi]        # Nebenbedingung in x3 Richtung
+
+# Definition des maximalen Suchbereiches
+maxD = np.ndarray(shape=(3,))
+maxD[0] = 10    # Suchbereich in x1 Richtung
+maxD[1] = 10    # Suchbereich in x2 Richtung
+maxD[2] = 10    # Suchbereich in x3 Richtung
+
+
+# Definition der Optimierungsparameter
+
+
 
 # Zielfunktionswert berechnen
 def zf(xVec):
@@ -36,3 +47,28 @@ def zf(xVec):
 
 # Suchbereich festlegen
 
+
+
+
+#1/5 Erfolg
+def Erfolg(A, x, n):
+    xNeu = []
+    Aneu = []
+    for i in range(n):
+        #xNeu wird mit den Werten aus ZF befüllt
+        xNeu.append(zf(A[i,:]))
+
+        #Abspeichern von verbesserten Werten
+        if xNeu[i] > zf(x):
+            Aneu.append(A[i,:])
+    #Überprüfung der Erfolgsregel
+    if n/5 > len(Aneu):
+        #print("Erfolgsregel eingehalten")
+        x[0] = A[np.argmax(xNeu),0]
+        x[1] = A[np.argmax(xNeu),1]
+        x[2] = A[np.argmax(xNeu),2]
+    else:
+        #print("Erfolgsregel nicht eingehalten")
+        maxD = maxD * 0.8
+
+Erfolg(A, x, n)

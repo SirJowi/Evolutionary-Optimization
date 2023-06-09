@@ -138,7 +138,7 @@ nb[2, :] = [-np.pi, np.pi]
 maxD = np.ndarray(shape=(3,))
 maxD[0] = 10    # Suchbereich in x1 Richtung
 maxD[1] = 10    # Suchbereich in x2 Richtung
-maxD[2] = 10   # Suchbereich in x3 Richtung
+maxD[2] = 10    # Suchbereich in x3 Richtung
 
 # Definition der Optimierungsparameter
 c1 = 0.8
