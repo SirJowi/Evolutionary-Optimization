@@ -51,7 +51,7 @@ def zf(xVec):
 
 
 #1/5 Erfolg
-def Erfolg(A, x, n):
+def Erfolg(A, x, n, maxD):
     xNeu = []
     Aneu = []
     for i in range(n):
@@ -63,12 +63,34 @@ def Erfolg(A, x, n):
             Aneu.append(A[i,:])
     #Überprüfung der Erfolgsregel
     if n/5 > len(Aneu):
-        #print("Erfolgsregel eingehalten")
-        x[0] = A[np.argmax(xNeu),0]
-        x[1] = A[np.argmax(xNeu),1]
-        x[2] = A[np.argmax(xNeu),2]
+        for j in range(len(A)):
+            if (nb[0, 0] <= A[np.argmax(xNeu), 0] <= nb[0, 1] and nb[1, 0] <= A[np.argmax(xNeu), 1] <= nb[1, 1] and nb[2, 0] <= A[np.argmax(xNeu), 2] <= nb[2, 1]):
+                x[0] = A[np.argmax(xNeu),0]
+                x[1] = A[np.argmax(xNeu),1]
+                x[2] = A[np.argmax(xNeu),2]
+            #print("Erfolgsregel eingehalten")
+            else:
+                if A[np.argmax(xNeu), 0] < nb[0, 0]:
+                    A[np.argmax(xNeu), 0] = nb[0, 0]
+                elif A[np.argmax(xNeu), 0] > nb[0, 1]:
+                    A[np.argmax(xNeu), 0] = nb[0, 1]
+
+                if A[np.argmax(xNeu), 1] < nb[1, 0]:
+                    A[np.argmax(xNeu), 1] = nb[1, 0]
+                elif A[np.argmax(xNeu), 1] > nb[1, 1]:
+                    A[np.argmax(xNeu), 1] = nb[1, 1]
+
+                if A[np.argmax(xNeu), 2] < nb[2, 0]:
+                    A[np.argmax(xNeu), 2] = nb[2, 0]
+                elif A[np.argmax(xNeu), 2] > nb[2, 1]:
+                    A[np.argmax(xNeu), 2] = nb[2, 1]
+
+                x[0] = A[np.argmax(xNeu),0]
+                x[1] = A[np.argmax(xNeu),1]
+                x[2] = A[np.argmax(xNeu),2]
+
     else:
         #print("Erfolgsregel nicht eingehalten")
         maxD = maxD * 0.8
 
-Erfolg(A, x, n)
+Erfolg(A, x, n, maxD)
