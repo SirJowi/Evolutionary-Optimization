@@ -1,4 +1,3 @@
-"""Unterprogramm zur Erzeugung von Kindpunkten in einem bestimmten Bereich"""
 import numpy as np
 from numpy.random import seed
 from numpy.random import normal
@@ -31,7 +30,7 @@ def normalverteilteKinder(C2 = 0.1, n = 20, maxD = 4, x_vec_Eltern = np.array([2
     x_vec_Kind_global= np.zeros(3)
     Kinder           = np.empty(3)    # Pro Zeile steht ein Kind (x1, x2, x3)
 
-    # valide Kinder sammeln -------------------------------------------------------------------------------------------/
+    # Sammel 20 valide Kinder -----------------------------------------------------------------------------------------/
     while len(Kinder) < n:
         # Lokales Kind erstellen --------------------------------------------------------------------------------------/
         for i in range(len(x_vec_Kind_lokal)):
@@ -48,6 +47,3 @@ def normalverteilteKinder(C2 = 0.1, n = 20, maxD = 4, x_vec_Eltern = np.array([2
             x_vec_Kind_global = x_vec_Kind_lokal + x_vec_Eltern
             Kinder = np.vstack([Kinder,x_vec_Kind_global])
     return Kinder
-
-
-print(normalverteilteKinder())
