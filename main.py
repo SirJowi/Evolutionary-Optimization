@@ -26,10 +26,10 @@ x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
 # Definition des maximalen Suchbereiches
 maxD = 4
 
-runAnz = 20 # Anzahl der Iterationen
-c1 = 0.2
+runAnz = 45 # Anzahl der Iterationen
+c1 = 0.5
 c2 = 0.1
-n = 20
+n = 10
 
 
 zfHistory = []
@@ -140,8 +140,8 @@ for i in range(runAnz):
     Kinder = normalverteilteKinder(c2, n, maxD, x)
     #print(Kinder)
     maxD, x = Erfolg(Kinder, x, n, maxD, c1)
-    print(zf(x))
-    print(i)
+    print("Funktionswert", zf(x))
+    #print(i)
 
 plotResults(zfHistory, xHistory)
 
