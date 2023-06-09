@@ -134,7 +134,7 @@ def plotResults(zfHistory, xHistory):
 
     plt.show()
 
-for p in range(3):
+for p in range(4):
 
     # zufälligen Startpunkt erstellen
     x = np.empty(3)
