@@ -40,7 +40,7 @@ def normalverteilteKinder(C2 = 0.1, n = 20, maxD = 4, x_vec_Eltern = np.array([2
                                                 obereGrenze         = maxD
                                                 )
             x_i_Kind_lokal = x_i_Kind_rdm.rvs()
-            x_vec_Kind_lokal[i] = x_i_Kind_lokal
+            x_i_Kind_lokal[i] = x_i_Kind_rdm.rvs(size=1)
 
         # Überprüfen, ob Kind innerhalb der Suchbox -----------------------------------------------------------------------/
         if KindBehalten(x_vec_Kind_lokal, minD) == True:

@@ -51,8 +51,8 @@ def suchBereichBestimmen(x, maxD, c1, c2, c3):
     maxSB[:, 1] = x + (0.5 * maxD * c1)
     minSB[:, 0] = x - (0.5 * maxD * c2)
     minSB[:, 1] = x + (0.5 * maxD * c2)
-    maxSB[:, 2] = x + (0.5 * maxD * c3)
-    minSB[:, 2] = x - (0.5 * maxD * c3)
+    # maxSB[:, 2] = x + (0.5 * maxD * c3)
+    # minSB[:, 2] = x - (0.5 * maxD * c3)
 
 
     return maxSB, minSB
