@@ -26,7 +26,7 @@ x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
 # Definition des maximalen Suchbereiches
 maxD = 4
 
-runAnz = 500 # Anzahl der Iterationen
+runAnz = 20 # Anzahl der Iterationen
 c1 = 0.8
 c2 = 0.1
 n = 20
@@ -65,38 +65,39 @@ def Erfolg(Kinder, x, n, maxD, c1):
             k += 1
 
     # Überprüfung der Erfolgsregel
-    if n / 5 > k:
-        for j in range(k):
-            if (nb[0, 0] <= Kinder[np.argmax(xNeu), 0] <= nb[0, 1] and nb[1, 0] <= Kinder[np.argmax(xNeu), 1] <= nb[1, 1] and nb[2, 0] <= Kinder[np.argmax(xNeu), 2] <= nb[2, 1]):
-                x[0] = Kinder[np.argmax(xNeu), 0]
-                x[1] = Kinder[np.argmax(xNeu), 1]
-                x[2] = Kinder[np.argmax(xNeu), 2]
-                return maxD, x
-            # print("Erfolgsregel eingehalten")
-            else:
-                if Kinder[np.argmax(xNeu), 0] < nb[0, 0]:
-                    Kinder[np.argmax(xNeu), 0] = nb[0, 0]
-                elif Kinder[np.argmax(xNeu), 0] > nb[0, 1]:
-                    Kinder[np.argmax(xNeu), 0] = nb[0, 1]
+        if n / 5 > k:
+            for j in range(k):
+                if (nb[0, 0] <= Kinder[np.argmax(xNeu), 0] <= nb[0, 1] and nb[1, 0] <= Kinder[np.argmax(xNeu), 1] <= nb[1, 1] and nb[2, 0] <= Kinder[np.argmax(xNeu), 2] <= nb[2, 1]):
+                    x[0] = Kinder[np.argmax(xNeu), 0]
+                    x[1] = Kinder[np.argmax(xNeu), 1]
+                    x[2] = Kinder[np.argmax(xNeu), 2]
+                    print("Im Bereich drin: ", x)
+                    return maxD, x
+                # print("Erfolgsregel eingehalten")
+                else:
+                    if Kinder[np.argmax(xNeu), 0] < nb[0, 0]:
+                        Kinder[np.argmax(xNeu), 0] = nb[0, 0]
+                    elif Kinder[np.argmax(xNeu), 0] > nb[0, 1]:
+                        Kinder[np.argmax(xNeu), 0] = nb[0, 1]
 
-                if Kinder[np.argmax(xNeu), 1] < nb[1, 0]:
-                    Kinder[np.argmax(xNeu), 1] = nb[1, 0]
-                elif Kinder[np.argmax(xNeu), 1] > nb[1, 1]:
-                    Kinder[np.argmax(xNeu), 1] = nb[1, 1]
+                    if Kinder[np.argmax(xNeu), 1] < nb[1, 0]:
+                        Kinder[np.argmax(xNeu), 1] = nb[1, 0]
+                    elif Kinder[np.argmax(xNeu), 1] > nb[1, 1]:
+                        Kinder[np.argmax(xNeu), 1] = nb[1, 1]
 
-                if Kinder[np.argmax(xNeu), 2] < nb[2, 0]:
-                    Kinder[np.argmax(xNeu), 2] = nb[2, 0]
-                elif Kinder[np.argmax(xNeu), 2] > nb[2, 1]:
-                    Kinder[np.argmax(xNeu), 2] = nb[2, 1]
-
-                x[0] = Kinder[np.argmax(xNeu), 0]
-                x[1] = Kinder[np.argmax(xNeu), 1]
-                x[2] = Kinder[np.argmax(xNeu), 2]
-        return maxD, x
-    else:
-        # print("Erfolgsregel nicht eingehalten")
-        maxD = maxD * c1
-        return maxD, x
+                    if Kinder[np.argmax(xNeu), 2] < nb[2, 0]:
+                        Kinder[np.argmax(xNeu), 2] = nb[2, 0]
+                    elif Kinder[np.argmax(xNeu), 2] > nb[2, 1]:
+                        Kinder[np.argmax(xNeu), 2] = nb[2, 1]
+                    print("Bereich angepasst: ", x)
+                    x[0] = Kinder[np.argmax(xNeu), 0]
+                    x[1] = Kinder[np.argmax(xNeu), 1]
+                    x[2] = Kinder[np.argmax(xNeu), 2]
+            return maxD, x
+        else:
+            # print("Erfolgsregel nicht eingehalten")
+            maxD = maxD * c1
+            return maxD, x
 
 
 
@@ -133,6 +134,7 @@ for i in range(runAnz):
     xHistory[i, :] = cp.deepcopy(x)
 
     Kinder = normalverteilteKinder(c2, n, maxD, x)
+    print(Kinder)
     maxD, x = Erfolg(Kinder, x, n, maxD, c1)
     print(zf(x))
     print(i)
