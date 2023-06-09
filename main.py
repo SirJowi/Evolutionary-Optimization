@@ -26,7 +26,7 @@ x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
 # Definition des maximalen Suchbereiches
 maxD = 4
 
-runAnz = 500 # Anzahl der Iterationen
+runAnz = 50 # Anzahl der Iterationen
 c1 = 0.5
 c2 = 0.1
 n = 10
@@ -132,20 +132,17 @@ def plotResults(zfHistory, xHistory):
 
     plt.show()
 
-<<<<<<< HEAD
-for p in range(4):
-=======
->>>>>>> refs/remotes/origin/main
+for p in range(3):
 
-for i in range(runAnz):
-    zfHistory.append(zf(x))
-    xHistory[i, :] = cp.deepcopy(x)
+    for i in range(runAnz):
+        zfHistory.append(zf(x))
+        xHistory[i, :] = cp.deepcopy(x)
 
-    Kinder = normalverteilteKinder(c2, n, maxD, x)
-    #print(Kinder)
-    maxD, x = Erfolg(Kinder, x, n, maxD, c1)
-    print("Funktionswert", zf(x))
-    #print(i)
+        Kinder = normalverteilteKinder(c2, n, maxD, x)
+        #print(Kinder)
+        maxD, x = Erfolg(Kinder, x, n, maxD, c1)
+        print("Funktionswert", zf(x))
+        #print(i)
 
 plotResults(zfHistory, xHistory)
 
