@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt             # Paket fürs grafische Darstellen
 from matplotlib import rc
 
 
+
 # zufälligen Startpunkt erstellen
 x = np.ndarray(shape=(3,))
 x[0] = random.uniform(nb[0,0],nb[0,1]) #x1 Richtung

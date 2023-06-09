@@ -48,4 +48,4 @@ def normalverteilteKinder(C2 = 0.1, n = 20, maxD = 4, x_vec_Eltern = np.array([2
             Kinder = np.vstack([Kinder,x_vec_Kind_global])
     return Kinder
 
-print(normalverteilteKinder())
+
