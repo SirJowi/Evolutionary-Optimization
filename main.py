@@ -63,7 +63,6 @@ def Erfolg(Kinder, x, n, maxD, c1):
         # Abspeichern von verbesserten Werten
         if xNeu[i] > zf(x):
             k += 1
-            print(k)
 
     # Überprüfung der Erfolgsregel
     if n / 5 > k:
@@ -127,8 +126,6 @@ def plotResults(zfHistory, xHistory):
 
     plt.show()
 
-print(c2, n, maxD, x)
-
 
 
 for i in range(runAnz):
@@ -138,6 +135,7 @@ for i in range(runAnz):
     Kinder = normalverteilteKinder(c2, n, maxD, x)
     maxD, x = Erfolg(Kinder, x, n, maxD, c1)
     print(zf(x))
+    print(i)
 
 plotResults(zfHistory, xHistory)
 
