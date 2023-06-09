@@ -16,20 +16,16 @@ nb[1, :] = [-np.pi, np.pi]        # Nebenbedingung in x2 Richtung
 nb[2, :] = [-np.pi, np.pi]        # Nebenbedingung in x3 Richtung
 
 
-# zufälligen Startpunkt erstellen
-x = np.empty(3)
-x[0] = random.uniform(nb[0,0],nb[0,1]) #x1 Richtung
-x[1] = random.uniform(nb[1,0],nb[1,1]) #x2 Richtung
-x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
+
 
 
 # Definition des maximalen Suchbereiches
 maxD = 4
 
-runAnz = 500 # Anzahl der Iterationen
+runAnz = 20 # Anzahl der Iterationen
 c1 = 0.5
 c2 = 0.1
-n = 10
+n = 30
 
 
 zfHistory = []
@@ -71,9 +67,9 @@ def Erfolg(Kinder, x, n, maxD, c1):
                     x[0] = Kinder[np.argmax(xNeu), 0]
                     x[1] = Kinder[np.argmax(xNeu), 1]
                     x[2] = Kinder[np.argmax(xNeu), 2]
-                    print("Im Bereich drin: ", x)
+                    #print("Im Bereich drin: ", x)
                     return maxD, x
-                # print("Erfolgsregel eingehalten")
+                #print("Erfolgsregel eingehalten")
                 else:
                     if Kinder[np.argmax(xNeu), 0] < nb[0, 0]:
                         Kinder[np.argmax(xNeu), 0] = nb[0, 0]
@@ -113,35 +109,49 @@ def plotResults(zfHistory, xHistory):
     ax1 = fig.add_subplot(121)
     ax2 = fig.add_subplot(122, projection='3d')
 
+    colors = ['red', 'green', 'blue']  # Farben für die drei Schleifen
+
     # Optimierungsfortschritt
-    ax1.plot(zfHistory, 'rx-', markersize=5, linewidth=1)
+    for p in range(3):
+        ax1.plot(zfHistory[p::3], 'x-', markersize=5, linewidth=1, color=colors[p], label=f'Schleife {p+1}')
     ax1.set_yscale('log')
     ax1.set_title('Optimierungsfortschritt')
     ax1.set_ylabel('Zielfunktionswert')
     ax1.set_xlabel('Optimierungsiteration')
     ax1.grid()
+    ax1.legend()
 
     # Eingangsraumabsuche (x1, x2, x3)
-    ax2.plot(xHistory[:, 0], xHistory[:, 1], xHistory[:, 2], 'bo-', markersize=5, linewidth=1)
+    for p in range(3):
+        ax2.plot(xHistory[:, 0][p::3], xHistory[:, 1][p::3], xHistory[:, 2][p::3], 'o-', markersize=5, linewidth=1, color=colors[p], label=f'Schleife {p+1}')
     ax2.plot([xHistory[0, 0]], [xHistory[0, 1]], [xHistory[0, 2]], 'ro', markersize=5)
     ax2.set_title('Eingangsraumabsuche')
     ax2.set_xlabel('x1')
     ax2.set_ylabel('x2')
     ax2.set_zlabel('x3')
     ax2.grid()
+    ax2.legend()
 
     plt.show()
 
+for p in range(3):
 
-for i in range(runAnz):
-    zfHistory.append(zf(x))
-    xHistory[i, :] = cp.deepcopy(x)
+    # zufälligen Startpunkt erstellen
+    x = np.empty(3)
+    x[0] = random.uniform(nb[0,0],nb[0,1]) #x1 Richtung
+    x[1] = random.uniform(nb[1,0],nb[1,1]) #x2 Richtung
+    x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
 
-    Kinder = normalverteilteKinder(c2, n, maxD, x)
-    #print(Kinder)
-    maxD, x = Erfolg(Kinder, x, n, maxD, c1)
-    print("Funktionswert", zf(x))
-    #print(i)
+
+    for i in range(runAnz):
+        zfHistory.append(zf(x))
+        xHistory[i, :] = cp.deepcopy(x)
+
+        Kinder = normalverteilteKinder(c2, n, maxD, x)
+        #print(Kinder)
+        maxD, x = Erfolg(Kinder, x, n, maxD, c1)
+        print("Funktionswert", zf(x))
+        #print(i)
 
 plotResults(zfHistory, xHistory)
 
