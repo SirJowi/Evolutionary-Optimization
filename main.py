@@ -31,7 +31,7 @@ anzKett = 4
 c1 = 0.5
 c2 = 0.1
 n = 10
-
+mm = -1 #Min oder Max
 
 zfHistory = []
 xHistory = np.zeros(shape=(runAnz, 3))
@@ -46,7 +46,7 @@ def zf(xVec):
     :return: zugehörigen Zielfunktionswert
     """
 
-    z = np.sin([xVec[0]]) + 7 * np.sin(xVec[1])**2 + 0.1 * xVec[2]**4 * np.sin(xVec[0])
+    z = mm*(np.sin([xVec[0]]) + 7 * np.sin(xVec[1])**2 + 0.1 * xVec[2]**4 * np.sin(xVec[0]))
     return z
 
 
