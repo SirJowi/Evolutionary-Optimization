@@ -27,6 +27,7 @@ x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
 maxD = 4
 
 runAnz = 50 # Anzahl der Iterationen
+anzKett = 4
 c1 = 0.5
 c2 = 0.1
 n = 10
@@ -102,10 +103,11 @@ def Erfolg(Kinder, x, n, maxD, c1):
 
 
 
-def plotResults(zfHistory, xHistory):
+def plotResults(zfHistory, xHistory, anzKett):
     """
     :param zfHistory: Liste der Zielfunktionswerte
     :param xHistory: Verlaufsdaten der Parameter
+    :param anzKett: Anzahl der Ketten
     :return: None
     """
 
@@ -113,26 +115,33 @@ def plotResults(zfHistory, xHistory):
     ax1 = fig.add_subplot(121)
     ax2 = fig.add_subplot(122, projection='3d')
 
+    colors = plt.cm.rainbow(np.linspace(0, 1, anzKett))  # Farben für die Ketten
+
     # Optimierungsfortschritt
-    ax1.plot(zfHistory, 'rx-', markersize=5, linewidth=1)
+    for p in range(anzKett):
+        ax1.plot(zfHistory[p::anzKett], 'x-', markersize=5, linewidth=1, color=colors[p], label=f'Schleife {p+1}')
     ax1.set_yscale('log')
     ax1.set_title('Optimierungsfortschritt')
     ax1.set_ylabel('Zielfunktionswert')
     ax1.set_xlabel('Optimierungsiteration')
     ax1.grid()
+    ax1.legend()
 
     # Eingangsraumabsuche (x1, x2, x3)
-    ax2.plot(xHistory[:, 0], xHistory[:, 1], xHistory[:, 2], 'bo-', markersize=5, linewidth=1)
+    for p in range(anzKett):
+        ax2.plot(xHistory[:, 0][p::anzKett], xHistory[:, 1][p::anzKett], xHistory[:, 2][p::anzKett], 'o-', markersize=5, linewidth=1, color=colors[p], label=f'Schleife {p+1}')
     ax2.plot([xHistory[0, 0]], [xHistory[0, 1]], [xHistory[0, 2]], 'ro', markersize=5)
     ax2.set_title('Eingangsraumabsuche')
     ax2.set_xlabel('x1')
     ax2.set_ylabel('x2')
     ax2.set_zlabel('x3')
     ax2.grid()
+    ax2.legend()
 
     plt.show()
 
-for p in range(3):
+
+for p in range(anzKett):
 
     for i in range(runAnz):
         zfHistory.append(zf(x))
@@ -144,7 +153,7 @@ for p in range(3):
         print("Funktionswert", zf(x))
         #print(i)
 
-plotResults(zfHistory, xHistory)
+plotResults(zfHistory, xHistory,anzKett)
 
 
 
