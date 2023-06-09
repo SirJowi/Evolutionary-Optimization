@@ -9,6 +9,20 @@ from matplotlib import rc
 from normalverteilteKinder import *
 from mpl_toolkits.mplot3d import Axes3D
 
+
+#-----------------------------------------------------------------------------------------------------
+
+maxD = 4 # Definition des maximalen Suchbereiches
+
+runAnz = 50 # Anzahl der Iterationen
+anzKett = 4 #Anzahl der Ketten
+c1 = 0.5 #
+c2 = 0.1
+n = 10 #Anzahl der Kinder
+mm = -1 #Min oder Max
+
+#-----------------------------------------------------------------------------------------------------
+
 # Nebenbedingungen festlegen
 nb = np.ndarray(shape=(3, 2))
 nb[0, :] = [-np.pi, np.pi]        # Nebenbedingung in x1 Richtung
@@ -22,19 +36,13 @@ x[0] = random.uniform(nb[0,0],nb[0,1]) #x1 Richtung
 x[1] = random.uniform(nb[1,0],nb[1,1]) #x2 Richtung
 x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
 
+#-----------------------------------------------------------------------------------------------------
 
-# Definition des maximalen Suchbereiches
-maxD = 4
-
-runAnz = 50 # Anzahl der Iterationen
-anzKett = 4
-c1 = 0.5
-c2 = 0.1
-n = 10
-mm = -1 #Min oder Max
-
+#Variablen für Plots
 zfHistory = []
 xHistory = np.zeros(shape=(runAnz, 3))
+
+#-----------------------------------------------------------------------------------------------------
 
 
 # Zielfunktionswert berechnen
@@ -49,11 +57,9 @@ def zf(xVec):
     z = mm*(np.sin([xVec[0]]) + 7 * np.sin(xVec[1])**2 + 0.1 * xVec[2]**4 * np.sin(xVec[0]))
     return z
 
+#-----------------------------------------------------------------------------------------------------
 
-
-
-
-#1/5 Erfolg
+#1/5 Erfolg und Nebenbedingung
 def Erfolg(Kinder, x, n, maxD, c1):
     xNeu = []
     k = 0
@@ -61,21 +67,22 @@ def Erfolg(Kinder, x, n, maxD, c1):
         # xNeu wird mit den Werten aus ZF befüllt
         xNeu.append(zf(Kinder[i, :]))
 
-        # Abspeichern von verbesserten Werten
+        # Hochzählen wieviele Werte besser sind
         if xNeu[i] > zf(x):
             k += 1
 
     # Überprüfung der Erfolgsregel
         if n / 5 > k:
             for j in range(k):
+                # Wenn Erfolgsregel erfüllt ist, werden die Koordinaten des besten Kindes zum neuen Elternpunkt
                 if (nb[0, 0] <= Kinder[np.argmax(xNeu), 0] <= nb[0, 1] and nb[1, 0] <= Kinder[np.argmax(xNeu), 1] <= nb[1, 1] and nb[2, 0] <= Kinder[np.argmax(xNeu), 2] <= nb[2, 1]):
                     x[0] = Kinder[np.argmax(xNeu), 0]
                     x[1] = Kinder[np.argmax(xNeu), 1]
                     x[2] = Kinder[np.argmax(xNeu), 2]
-                    print("Im Bereich drin: ", x)
                     return maxD, x
-                # print("Erfolgsregel eingehalten")
                 else:
+                    # Wenn die Erfolgsregel nicht eingehalten wird:
+                    # Fakultativ: jeweilige Über-/Unterschreitung der NB, wird der jeweilige Wert zurück auf den Rand gesetzt
                     if Kinder[np.argmax(xNeu), 0] < nb[0, 0]:
                         Kinder[np.argmax(xNeu), 0] = nb[0, 0]
                     elif Kinder[np.argmax(xNeu), 0] > nb[0, 1]:
@@ -90,18 +97,18 @@ def Erfolg(Kinder, x, n, maxD, c1):
                         Kinder[np.argmax(xNeu), 2] = nb[2, 0]
                     elif Kinder[np.argmax(xNeu), 2] > nb[2, 1]:
                         Kinder[np.argmax(xNeu), 2] = nb[2, 1]
-                    print("Bereich angepasst: ", x)
+
+                    # Koordinaten des besten Kindes zum neuen Elternpunkt
                     x[0] = Kinder[np.argmax(xNeu), 0]
                     x[1] = Kinder[np.argmax(xNeu), 1]
                     x[2] = Kinder[np.argmax(xNeu), 2]
             return maxD, x
         else:
-            # print("Erfolgsregel nicht eingehalten")
+            # Wenn Erfolgsregel nicht erfüllt, wird der Suchbereich verkleinert
             maxD = maxD * c1
             return maxD, x
 
-
-
+#-----------------------------------------------------------------------------------------------------
 
 def plotResults(zfHistory, xHistory, anzKett):
     """
@@ -140,18 +147,21 @@ def plotResults(zfHistory, xHistory, anzKett):
 
     plt.show()
 
+#-----------------------------------------------------------------------------------------------------
 
 for p in range(anzKett):
 
     for i in range(runAnz):
+
         zfHistory.append(zf(x))
         xHistory[i, :] = cp.deepcopy(x)
 
         Kinder = normalverteilteKinder(c2, n, maxD, x)
-        #print(Kinder)
+
         maxD, x = Erfolg(Kinder, x, n, maxD, c1)
         print("Funktionswert", zf(x))
-        #print(i)
+
+#-----------------------------------------------------------------------------------------------------
 
 plotResults(zfHistory, xHistory,anzKett)
 
