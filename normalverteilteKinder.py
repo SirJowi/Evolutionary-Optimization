@@ -24,15 +24,15 @@ def KindBehalten(x_vec_Kind, minD):
 
 # Deklarieren ---------------------------------------------------------------------------------------------------------/
 def normalverteilteKinder(C2 = 0.1, n = 20, maxD = 4, x_vec_Eltern = np.array([2., 3., 1.])):
-    # Initialisieren ------------------------------------------------------------------------------------------------------/
-    minD    = C2 * maxD    # Box minimal
+    # Initialisieren --------------------------------------------------------------------------------------------------/
+    minD             = C2 * maxD    # Box minimal
     x_vec_Kind_lokal = np.zeros(3)
     x_vec_Kind_global= np.zeros(3)
-    Kinder = np.empty(3)    # Pro Zeile steht ein Kind (x1, x2, x3)
+    Kinder           = np.empty(3)    # Pro Zeile steht ein Kind (x1, x2, x3)
 
-    # Sammel 20 valide Kinder ---------------------------------------------------------------------------------------------/
+    # Sammel 20 valide Kinder -----------------------------------------------------------------------------------------/
     while len(Kinder) < n:
-        # Lokales Kind erstellen ------------------------------------------------------------------------------------------/
+        # Lokales Kind erstellen --------------------------------------------------------------------------------------/
         for i in range(len(x_vec_Kind_lokal)):
             x_i_Kind_rdm = get_truncated_normal(Mittelwert          = 0,
                                                 Standardabweichung  = maxD/3,
@@ -42,7 +42,7 @@ def normalverteilteKinder(C2 = 0.1, n = 20, maxD = 4, x_vec_Eltern = np.array([2
             x_i_Kind_lokal = x_i_Kind_rdm.rvs()
             x_vec_Kind_lokal[i] = x_i_Kind_lokal
 
-        # Überprüfen, ob Kind innerhalb der Suchbox -----------------------------------------------------------------------/
+        # Überprüfen, ob Kind innerhalb der Suchbox -------------------------------------------------------------------/
         if KindBehalten(x_vec_Kind_lokal, minD) == True:
             x_vec_Kind_global = x_vec_Kind_lokal + x_vec_Eltern
             Kinder = np.vstack([Kinder,x_vec_Kind_global])
