@@ -7,7 +7,7 @@ import numpy as np                          # Paket für numerische Operationen
 import matplotlib.pyplot as plt             # Paket fürs grafische Darstellen
 from matplotlib import rc
 from normalverteilteKinder import *
-
+from mpl_toolkits.mplot3d import Axes3D
 
 # Nebenbedingungen festlegen
 nb = np.ndarray(shape=(3, 2))
@@ -27,7 +27,7 @@ x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
 maxD = 4
 
 runAnz = 20 # Anzahl der Iterationen
-c1 = 0.8
+c1 = 0.2
 c2 = 0.1
 n = 20
 
@@ -104,29 +104,33 @@ def Erfolg(Kinder, x, n, maxD, c1):
 
 def plotResults(zfHistory, xHistory):
     """
-
-    :param zfHistory:
-    :param xHistory:
+    :param zfHistory: Liste der Zielfunktionswerte
+    :param xHistory: Verlaufsdaten der Parameter
     :return: None
     """
 
-    fig, ax = plt.subplots(1, 2)
-    ax[0].plot(zfHistory, 'rx-', markersize=5, linewidth=1)
-    ax[0].set_yscale('log')
-    ax[1].plot(xHistory[:, 0], xHistory[:, 1], 'bx-', markersize=5, linewidth=1)
-    ax[1].plot(1, 3, 'r.', markersize=3)
-    ax[0].grid()
-    ax[1].grid()
-    ax[0].set_title('Optimierungsfortschritt')
-    ax[0].set_ylabel('Zielfunktionswert')
-    ax[0].set_xlabel('Optimierungsiteration')
-    ax[1].set_title('Eingangsraumabsuche')
-    ax[1].set_ylabel(r'$x_2$')
-    ax[1].set_xlabel(r'$x_1$')
-    fig.tight_layout()
+    fig = plt.figure(figsize=(12, 6))
+    ax1 = fig.add_subplot(121)
+    ax2 = fig.add_subplot(122, projection='3d')
+
+    # Optimierungsfortschritt
+    ax1.plot(zfHistory, 'rx-', markersize=5, linewidth=1)
+    ax1.set_yscale('log')
+    ax1.set_title('Optimierungsfortschritt')
+    ax1.set_ylabel('Zielfunktionswert')
+    ax1.set_xlabel('Optimierungsiteration')
+    ax1.grid()
+
+    # Eingangsraumabsuche (x1, x2, x3)
+    ax2.plot(xHistory[:, 0], xHistory[:, 1], xHistory[:, 2], 'bo-', markersize=5, linewidth=1)
+    ax2.plot([xHistory[0, 0]], [xHistory[0, 1]], [xHistory[0, 2]], 'ro', markersize=5)
+    ax2.set_title('Eingangsraumabsuche')
+    ax2.set_xlabel('x1')
+    ax2.set_ylabel('x2')
+    ax2.set_zlabel('x3')
+    ax2.grid()
 
     plt.show()
-
 
 
 for i in range(runAnz):
@@ -134,7 +138,7 @@ for i in range(runAnz):
     xHistory[i, :] = cp.deepcopy(x)
 
     Kinder = normalverteilteKinder(c2, n, maxD, x)
-    print(Kinder)
+    #print(Kinder)
     maxD, x = Erfolg(Kinder, x, n, maxD, c1)
     print(zf(x))
     print(i)
