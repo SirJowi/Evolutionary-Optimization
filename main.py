@@ -26,7 +26,7 @@ x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
 # Definition des maximalen Suchbereiches
 maxD = 4
 
-runAnz = 45 # Anzahl der Iterationen
+runAnz = 500 # Anzahl der Iterationen
 c1 = 0.5
 c2 = 0.1
 n = 10
