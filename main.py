@@ -17,18 +17,14 @@ nb[2, :] = [-np.pi, np.pi]        # Nebenbedingung in x3 Richtung
 
 
 # zufälligen Startpunkt erstellen
-x = np.ndarray(shape=(3,))
+x = np.empty(3)
 x[0] = random.uniform(nb[0,0],nb[0,1]) #x1 Richtung
 x[1] = random.uniform(nb[1,0],nb[1,1]) #x2 Richtung
 x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
 
 
 # Definition des maximalen Suchbereiches
-maxD = np.ndarray(shape=(3,))
-maxD[0] = 4    # Suchbereich in x1 Richtung
-maxD[1] = 4    # Suchbereich in x2 Richtung
-maxD[2] = 4    # Suchbereich in x3 Richtung
-
+maxD = 4
 
 runAnz = 500 # Anzahl der Iterationen
 c1 = 0.8
@@ -131,7 +127,7 @@ def plotResults(zfHistory, xHistory):
 
     plt.show()
 
-
+print(c2, n, maxD, x)
 
 
 
@@ -139,8 +135,8 @@ for i in range(runAnz):
     zfHistory.append(zf(x))
     xHistory[i, :] = cp.deepcopy(x)
 
-    Kinder = normalverteilteKinder(c2,n, maxD, x)
-    maxD,x = Erfolg(Kinder, x, n, maxD, c1)
+    Kinder = normalverteilteKinder(c2, n, maxD, x)
+    maxD, x = Erfolg(Kinder, x, n, maxD, c1)
     print(zf(x))
 
 plotResults(zfHistory, xHistory)
