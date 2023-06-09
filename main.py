@@ -45,25 +45,23 @@ def zf(xVec):
 
 
 
-# Suchbereich festlegen
-
-
 
 
 #1/5 Erfolg
-def Erfolg(A, x, n, maxD):
+def Erfolg(A, x, n, maxD, c1):
     xNeu = []
-    Aneu = []
+    k = 0
     for i in range(n):
         #xNeu wird mit den Werten aus ZF befüllt
         xNeu.append(zf(A[i,:]))
 
         #Abspeichern von verbesserten Werten
         if xNeu[i] > zf(x):
-            Aneu.append(A[i,:])
+            k += 1
+            print(k)
     #Überprüfung der Erfolgsregel
-    if n/5 > len(Aneu):
-        for j in range(len(A)):
+    if n/5 > k:
+        for j in range(k):#len(A)):
             if (nb[0, 0] <= A[np.argmax(xNeu), 0] <= nb[0, 1] and nb[1, 0] <= A[np.argmax(xNeu), 1] <= nb[1, 1] and nb[2, 0] <= A[np.argmax(xNeu), 2] <= nb[2, 1]):
                 x[0] = A[np.argmax(xNeu),0]
                 x[1] = A[np.argmax(xNeu),1]
@@ -91,6 +89,9 @@ def Erfolg(A, x, n, maxD):
 
     else:
         #print("Erfolgsregel nicht eingehalten")
-        maxD = maxD * 0.8
+        maxD = maxD * c1
 
-Erfolg(A, x, n, maxD)
+#Erfolg(A, x, n, maxD, c1)
+
+
+
