@@ -10,12 +10,12 @@ from mpl_toolkits.mplot3d import Axes3D
 
 #-----------------------------------------------------------------------------------------------------
 
-maxD = 0.5 # Definition des maximalen Suchbereiches
-runAnz = 25 # Anzahl der Iterationen
+maxD = 1.0 # Definition des maximalen Suchbereiches
+runAnz = 50 # Anzahl der Iterationen
 anzKett = 9 #Anzahl der Ketten
 c1 = 0.5 # Faktor mit dem maxD verkleinert wird bei 1/5 Regel
 c2 = 0.1 # minD / maxD
-n = 20 #Anzahl der Kinder
+n = 25 #Anzahl der Kinder
 mm = 1 #Min = -1 oder Max = +1
 
 #-----------------------------------------------------------------------------------------------------
@@ -28,12 +28,13 @@ nb[2, :] = [-np.pi, np.pi]        # Nebenbedingung in x3 Richtung
 
 
 # zufälligen Startpunkt erstellen
-"""
-x = np.empty(3)
-x[0] = random.uniform(nb[0,0],nb[0,1]) #x1 Richtung
-x[1] = random.uniform(nb[1,0],nb[1,1]) #x2 Richtung
-x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
-"""
+def Startpunkt():
+    x = np.empty(3)
+    x[0] = random.uniform(nb[0,0],nb[0,1]) #x1 Richtung
+    x[1] = random.uniform(nb[1,0],nb[1,1]) #x2 Richtung
+    x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
+    return x
+
 #-----------------------------------------------------------------------------------------------------
 
 #Variablen für Plots
@@ -148,13 +149,11 @@ def plotResults(zfHistory, xHistory, anzKett):
 
 #-----------------------------------------------------------------------------------------------------
 maxF = 0
-print("\t Kette\t| Startpunkt\t\t\t\t\t\t\t\t| Extremwert\t| Zielpunkt")
+print("\t Kette\t| Startpunkt/Zielpunkt\t\t\t\t\t\t| Zielpunkt")
+print("\t-------------------------------------------------------------------")
 for p in range(anzKett):
-    x = np.empty(3)
-    x[0] = random.uniform(nb[0, 0], nb[0, 1])  # x1 Richtung
-    x[1] = random.uniform(nb[1, 0], nb[1, 1])  # x2 Richtung
-    x[2] = random.uniform(nb[2, 0], nb[2, 1])  # x3 Richtung
-    x_start = x
+    x = Startpunkt()
+    print("\t\t\t|", x, "\t|")
     for i in range(runAnz):
 
         zfHistory.append(zf(x))
@@ -164,15 +163,18 @@ for p in range(anzKett):
 
         maxD, x = Erfolg(Kinder, x, n, maxD, c1)
 
-    print("\t", p + 1, "\t\t|", x_start, "\t|", zf(x), "\t|", x)
+    print("\t", p + 1, "\t\t|", x,"\t|", zf(x))
+    print("\t-------------------------------------------------------------------")
+
     if zf(x) > maxF:
         maxKette = p
         maxF = zf(x)
+        maxx = x
 #-----------------------------------------------------------------------------------------------------
 
 print("")
-print("\t#--- Suche abgeschlossen --------------------------------------#")
-print("\t", maxKette, "\t\t| Extremwert:", maxF)
+print("\t-----Suche abgeschlossen-------------------------------------------")
+print("\t", maxKette, "\t\t|", x,"\t|", maxF)
 
 plotResults(zfHistory, xHistory,anzKett)
 
