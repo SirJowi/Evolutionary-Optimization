@@ -1,6 +1,5 @@
 """Beleg 3 - Modifizierte Evolutionsstrategie | 08/06/2023"""
 
-
 import random
 import copy as cp
 import numpy as np                          # Paket für numerische Operationen
@@ -9,17 +8,15 @@ from matplotlib import rc
 from normalverteilteKinder import *
 from mpl_toolkits.mplot3d import Axes3D
 
-
 #-----------------------------------------------------------------------------------------------------
 
-maxD = 4 # Definition des maximalen Suchbereiches
-
+maxD = 1.0 # Definition des maximalen Suchbereiches
 runAnz = 50 # Anzahl der Iterationen
-anzKett = 4 #Anzahl der Ketten
-c1 = 0.5 #
-c2 = 0.1
-n = 10 #Anzahl der Kinder
-mm = -1 #Min oder Max
+anzKett = 9 #Anzahl der Ketten
+c1 = 0.5 # Faktor mit dem maxD verkleinert wird bei 1/5 Regel
+c2 = 0.1 # minD / maxD
+n = 25 #Anzahl der Kinder
+mm = 1 #Min = -1 oder Max = +1
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -31,10 +28,12 @@ nb[2, :] = [-np.pi, np.pi]        # Nebenbedingung in x3 Richtung
 
 
 # zufälligen Startpunkt erstellen
-x = np.empty(3)
-x[0] = random.uniform(nb[0,0],nb[0,1]) #x1 Richtung
-x[1] = random.uniform(nb[1,0],nb[1,1]) #x2 Richtung
-x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
+def Startpunkt():
+    x = np.empty(3)
+    x[0] = random.uniform(nb[0,0],nb[0,1]) #x1 Richtung
+    x[1] = random.uniform(nb[1,0],nb[1,1]) #x2 Richtung
+    x[2] = random.uniform(nb[2,0],nb[2,1]) #x3 Richtung
+    return x
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -70,7 +69,7 @@ def Erfolg(Kinder, x, n, maxD, c1):
         # Hochzählen wieviele Werte besser sind
         if xNeu[i] > zf(x):
             k += 1
-
+            #print("k:",k)
     # Überprüfung der Erfolgsregel
         if n / 5 > k:
             for j in range(k):
@@ -81,6 +80,7 @@ def Erfolg(Kinder, x, n, maxD, c1):
                     x[2] = Kinder[np.argmax(xNeu), 2]
                     return maxD, x
                 else:
+                    #print("RB verletzt")
                     # Wenn die Erfolgsregel nicht eingehalten wird:
                     # Fakultativ: jeweilige Über-/Unterschreitung der NB, wird der jeweilige Wert zurück auf den Rand gesetzt
                     if Kinder[np.argmax(xNeu), 0] < nb[0, 0]:
@@ -147,10 +147,14 @@ def plotResults(zfHistory, xHistory, anzKett):
 
     plt.show()
 
+
 #-----------------------------------------------------------------------------------------------------
-
+maxF = 0
+print("\t Kette\t| Startpunkt/Zielpunkt\t\t\t\t\t\t| Zielpunkt")
+print("\t-------------------------------------------------------------------")
 for p in range(anzKett):
-
+    x = Startpunkt()
+    print("\t\t\t|", x, "\t|")
     for i in range(runAnz):
 
         zfHistory.append(zf(x))
@@ -159,11 +163,22 @@ for p in range(anzKett):
         Kinder = normalverteilteKinder(c2, n, maxD, x)
 
         maxD, x = Erfolg(Kinder, x, n, maxD, c1)
-        print("Funktionswert", zf(x))
 
+    print("\t", p + 1, "\t\t|", x,"\t|", zf(x))
+    print("\t-------------------------------------------------------------------")
+
+    if zf(x) > maxF:
+        maxKette = p
+        maxF = zf(x)
+        maxx = x
 #-----------------------------------------------------------------------------------------------------
 
+print("")
+print("\t-----Suche abgeschlossen-------------------------------------------")
+print("\t", maxKette, "\t\t|", x,"\t|", maxF)
+
 plotResults(zfHistory, xHistory,anzKett)
+
 
 
 

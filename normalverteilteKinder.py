@@ -13,7 +13,7 @@ def get_truncated_normal(Mittelwert=0, Standardabweichung=1, untereGrenze=-10, o
     )
 
 # Entscheide ob ich das Kind behalten soll, oder nicht. Behalten = True, Entfernen = False ----------------------------/
-def KindBehalten(x_vec_Kind, minD):
+def KindBehalten(x_vec_Kind, x_vec_Eltern, minD):
     behalten = False
     for i in range(len(x_vec_Kind)):
         if x_vec_Kind[i] > minD or x_vec_Kind[i] < - minD:
@@ -21,6 +21,17 @@ def KindBehalten(x_vec_Kind, minD):
         else:
             continue
     return behalten
+
+# Überprüfe ob eine Nebenbedingung verletzt wird (NB hardcoded!)
+def NBverletzt(x_vec_Kind_global):
+    verletzt = False
+    for i in range(len(x_vec_Kind_global)):
+        if x_vec_Kind_global[i] > np.pi or x_vec_Kind_global[i] < -np.pi:
+            verletzt = True
+            return verletzt
+        else:
+            continue
+    return verletzt
 
 # Deklarieren ---------------------------------------------------------------------------------------------------------/
 def normalverteilteKinder(C2 = 0.1, n = 20, maxD = 4, x_vec_Eltern = np.array([2., 3., 1.])):
@@ -43,7 +54,7 @@ def normalverteilteKinder(C2 = 0.1, n = 20, maxD = 4, x_vec_Eltern = np.array([2
             x_vec_Kind_lokal[i] = x_i_Kind_lokal
 
         # Überprüfen, ob Kind innerhalb der Suchbox -------------------------------------------------------------------/
-        if KindBehalten(x_vec_Kind_lokal, minD) == True:
-            x_vec_Kind_global = x_vec_Kind_lokal + x_vec_Eltern
+        x_vec_Kind_global = x_vec_Kind_lokal + x_vec_Eltern
+        if (KindBehalten(x_vec_Kind_lokal, x_vec_Eltern, minD) == True) and (NBverletzt(x_vec_Kind_global) == False):
             Kinder = np.vstack([Kinder,x_vec_Kind_global])
     return Kinder
