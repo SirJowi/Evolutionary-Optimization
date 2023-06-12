@@ -147,6 +147,7 @@ def plotResults(zfHistory, xHistory, anzKett):
 
     plt.show()
 
+
 #-----------------------------------------------------------------------------------------------------
 maxF = 0
 print("\t Kette\t| Startpunkt/Zielpunkt\t\t\t\t\t\t| Zielpunkt")
